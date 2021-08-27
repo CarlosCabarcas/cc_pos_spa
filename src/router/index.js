@@ -2,13 +2,21 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import NProgress from "nprogress"
 import Home from '../views/'
+import Login from '../views/auth/Login'
 
 Vue.use(VueRouter)
 
-const routes = [{
-    path: '/',
-    component: Home
-}]
+const routes = [
+    {
+        path: '/',
+        component: Home
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
+    }
+]
 
 const router = new VueRouter({
     mode: 'history',
