@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import store from "../store"
 import VueRouter from 'vue-router'
 // import NProgress from "nprogress"
 import Home from '../views/'
@@ -6,15 +7,32 @@ import Login from '../views/auth/Login'
 
 Vue.use(VueRouter)
 
+const ifNotAuthenticated = (to, from, next) => {
+    if (!store.getters.isAuthenticated) {
+        next()
+        return
+    }
+    next('/')
+}
+  
+const ifAuthenticated = (to, from, next) => {
+    if (store.getters.isAuthenticated) {
+        return next()
+    }
+    next('/login')
+}
+
 const routes = [
     {
         path: '/',
-        component: Home
+        component: Home,
+        beforeEnter: ifAuthenticated
     },
     {
         path: '/login',
         name: 'Login',
-        component: Login
+        component: Login,
+        beforeEnter: ifNotAuthenticated
     }
 ]
 

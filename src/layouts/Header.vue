@@ -1,13 +1,5 @@
 <template>
     <div class="main-header">
-        <div class="logo">
-            <img src="" alt="">
-        </div>
-        <div class="menu-toggle">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
         <div class="d-flex align-items-center">
             <!-- Mega menu -->
             <div class="dropdown mega-menu d-none d-md-block">
