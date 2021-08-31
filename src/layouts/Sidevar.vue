@@ -3,33 +3,33 @@
     <div class="sidebar-left open rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
         <ul class="navigation-left">
             <li :class="{ 'nav-item': defaultClass,  'active': showInventoryMenu}" data-item="dashboard">
-                <a class="nav-item-hold" href="#" @click="changeOption('inventory')">
-                    <i class="nav-icon i-Bar-Chart"></i>
+                <a class="nav-item-hold" @click="changeOption('inventory')">
+                    <i class="nav-icon i-Check"></i>
                     <span class="nav-text">Inventario</span>
                 </a>
                 <div class="triangle"></div>
             </li>
 
             <li :class="{ 'nav-item': defaultClass, 'active': showClientsMenu }" data-item="dashboard">
-                <a class="nav-item-hold" href="#" @click="changeOption('clients')">
-                    <i class="nav-icon i-Bar-Chart"></i>
+                <a class="nav-item-hold" @click="changeOption('clients')">
+                    <i class="nav-icon i-Business-ManWoman"></i>
                     <span class="nav-text">Clientes</span>
                 </a>
                 <div class="triangle"></div>
             </li>
             
             <li :class="{ 'nav-item': defaultClass, 'active': showSalesMenu }" data-item="dashboard">
-                <a class="nav-item-hold" href="#" @click="changeOption('sales')">
-                    <i class="nav-icon i-Bar-Chart"></i>
+                <a class="nav-item-hold" @click="changeOption('sales')">
+                    <i class="nav-icon i-Cash-register-2"></i>
                     <span class="nav-text">Ventas</span>
                 </a>
                 <div class="triangle"></div>
             </li>
             
             <li :class="{ 'nav-item': defaultClass, 'active': showReportsMenu }" data-item="dashboard">
-                <a class="nav-item-hold" href="#" @click="changeOption('reports')">
+                <a class="nav-item-hold" @click="changeOption('reports')">
                     <i class="nav-icon i-Bar-Chart"></i>
-                    <span class="nav-text">Ventas</span>
+                    <span class="nav-text">Reportes</span>
                 </a>
                 <div class="triangle"></div>
             </li>
@@ -50,16 +50,16 @@
             </header>
             <ul class="childNav">
                 <li class="nav-item">
-                    <a href="dashboard1.html">
-                        <i class="nav-icon i-Clock-3"></i>
+                    <router-link :to="{ name: 'Products' }">
+                        <i class="nav-icon i-Full-Basket"></i>
                         <span class="item-name">Productos</span>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="nav-item">
-                    <a href="dashboard2.html">
-                        <i class="nav-icon i-Clock-4"></i>
+                    <router-link to="/inventory/purchase">
+                        <i class="nav-icon i-Checkout"></i>
                         <span class="item-name">Compras</span>
-                    </a>
+                    </router-link>
                 </li>
             </ul>
         </div>
@@ -71,10 +71,10 @@
             </header>
             <ul class="childNav">
                 <li class="nav-item">
-                    <a href="dashboard1.html">
-                        <i class="nav-icon i-Clock-3"></i>
+                    <router-link to="/clients/register">
+                        <i class="nav-icon i-Add-User"></i>
                         <span class="item-name">Registro de clientes</span>
-                    </a>
+                    </router-link>
                 </li>
             </ul>
         </div>
@@ -86,10 +86,10 @@
             </header>
             <ul class="childNav">
                 <li class="nav-item">
-                    <a href="dashboard1.html">
-                        <i class="nav-icon i-Clock-3"></i>
+                    <router-link to="/sales/point-of-sales">
+                        <i class="nav-icon i-Cash-register-2"></i>
                         <span class="item-name">Punto de venta</span>
-                    </a>
+                    </router-link >
                 </li>
             </ul>
         </div>
@@ -101,16 +101,16 @@
             </header>
             <ul class="childNav">
                 <li class="nav-item">
-                    <a href="dashboard1.html">
-                        <i class="nav-icon i-Clock-3"></i>
+                    <router-link to="/report/sales">
+                        <i class="nav-icon i-Line-Chart"></i>
                         <span class="item-name">Reporte de ventas</span>
-                    </a>
+                    </router-link>
                 </li>
                 <li class="nav-item">
-                    <a href="dashboard1.html">
-                        <i class="nav-icon i-Clock-3"></i>
+                    <router-link to="/report/purchases">
+                        <i class="nav-icon i-Bar-Chart-3"></i>
                         <span class="item-name">Reporte de compras</span>
-                    </a>
+                    </router-link>
                 </li>
             </ul>
         </div>
