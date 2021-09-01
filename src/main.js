@@ -5,6 +5,7 @@ import store from './store'
 import axios from 'axios'
 import VueToastr from '@deveodk/vue-toastr'
 import '@deveodk/vue-toastr/dist/@deveodk/vue-toastr.css'
+import BootstrapVue from "bootstrap-vue";
 
 window.axios = axios;
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
@@ -17,6 +18,7 @@ if (token) {
 
 Vue.config.productionTip = false
 Vue.use(VueToastr);
+Vue.use(BootstrapVue);
 
 new Vue({
   router,

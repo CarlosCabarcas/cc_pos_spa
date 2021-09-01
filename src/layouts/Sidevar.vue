@@ -46,7 +46,6 @@
         <div v-show="showInventoryMenu">
             <header>
                 <h6>Inventario</h6>
-                <p>Lorem ipsum dolor sit.</p>
             </header>
             <ul class="childNav">
                 <li class="nav-item">
@@ -67,7 +66,6 @@
         <div v-show="showClientsMenu">
             <header>
                 <h6>Clientes</h6>
-                <p>Lorem ipsum dolor sit.</p>
             </header>
             <ul class="childNav">
                 <li class="nav-item">
@@ -82,7 +80,6 @@
         <div v-show="showSalesMenu">
             <header>
                 <h6>Ventas</h6>
-                <p>Lorem ipsum dolor sit.</p>
             </header>
             <ul class="childNav">
                 <li class="nav-item">
@@ -97,7 +94,6 @@
         <div v-show="showReportsMenu">
             <header>
                 <h6>Reportes</h6>
-                <p>Lorem ipsum dolor sit.</p>
             </header>
             <ul class="childNav">
                 <li class="nav-item">
