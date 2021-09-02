@@ -25,17 +25,17 @@
       </b-col>
     </b-row>
 
-    <CreateProduc/>
+    <ModalFormProduct/>
 
   </div>
 </template>
 
 <script>
-import CreateProduc from '../../../components/modals/CreateProduct.vue'
+import ModalFormProduct from '../../../components/modals/ModalFormProduct.vue'
 
 export default {
   components: {
-    CreateProduc
+    ModalFormProduct
   },
   data() {
     return {

@@ -6,6 +6,18 @@ import axios from 'axios'
 import VueToastr from '@deveodk/vue-toastr'
 import '@deveodk/vue-toastr/dist/@deveodk/vue-toastr.css'
 import BootstrapVue from "bootstrap-vue";
+import { ValidationObserver, ValidationProvider, extend, localize } from 'vee-validate';
+import es from 'vee-validate/dist/locale/es.json';
+import * as rules from 'vee-validate/dist/rules';
+
+Object.keys(rules).forEach(rule => {
+  extend(rule, rules[rule]);
+});
+
+localize('es', es);
+
+Vue.component('ValidationObserver', ValidationObserver);
+Vue.component('ValidationProvider', ValidationProvider);
 
 window.axios = axios;
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
