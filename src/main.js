@@ -3,8 +3,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 import axios from 'axios'
-import VueToastr from '@deveodk/vue-toastr'
-import '@deveodk/vue-toastr/dist/@deveodk/vue-toastr.css'
+import VueToastr from 'vue-toastr'
+// import '@deveodk/vue-toastr/dist/@deveodk/vue-toastr.css'
 import BootstrapVue from "bootstrap-vue";
 import { ValidationObserver, ValidationProvider, extend, localize } from 'vee-validate';
 import es from 'vee-validate/dist/locale/es.json';
