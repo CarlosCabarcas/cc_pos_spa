@@ -191,19 +191,21 @@ export default {
       let self = this
       window.axios.post('/api/products/create', data)
       .then(function (response) {
-        console.log(response);
         if (response.data.success) {
           self.$toastr.s("SE HA CREADO EL PRODUCTO", "Operación exitosa");
+          self.$root.$emit('getProducts');
+          self.$bvModal.hide('bv-modal-products');
         }
       })
-      .catch(function () {
+      .catch(function (error) {
+        console.log('error', error);
         self.$toastr.e("HA OCURRIDO UN ERROR");
       });
     },
     uploadImage(e){
       this.form.image = e.target.files[0];
     }
-  }
+  },
 }
 </script>
 

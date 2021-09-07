@@ -21,7 +21,26 @@
 
     <b-row class="pt-5">
       <b-col>
-        <b-table striped hover :items="items" :fields="fields"></b-table>
+        <b-table striped hover :items="products" :fields="fields" :busy="isBusy">
+
+          <template #table-busy>
+            <div class="text-center my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong>Loading...</strong>
+            </div>
+          </template>
+
+          <template #cell(options)>
+            <a title="Editar" class="text-success mr-4 cursor-pointer">
+              <i class="nav-icon i-Pen-2 font-weight-bold"></i>
+            </a>
+
+            <a title="Eliminar" class="text-danger cursor-pointer">
+              <i class="nav-icon i-Remove font-weight-bold"></i>
+            </a>
+          </template>
+
+        </b-table>
       </b-col>
     </b-row>
 
@@ -31,7 +50,7 @@
 </template>
 
 <script>
-import ModalFormProduct from '../../../components/modals/ModalFormProduct.vue'
+import ModalFormProduct from '@/components/modals/ModalFormProduct.vue'
 
 export default {
   components: {
@@ -39,19 +58,38 @@ export default {
   },
   data() {
     return {
+      isBusy: false,
       fields: [
-        'ID',
-        'Referencia',
-        'Nombre',
-        'Precio de compra',
-        'Precio de venta',
-        'Stock',
-        'Opciones'
+        {key: 'id', label: 'ID'},
+        {key: 'reference', label: 'Referencia'},
+        {key: 'name', label: 'Nombre'},
+        {key: 'purchase_price', label: 'Precio de compra'},
+        {key: 'sale_price', label: 'Precio de venta'},
+        {key: 'stock', label: 'Stock'},
+        {key: 'options', label: 'Opciones'}
       ],
-      items: [
-      ]
+      products: []
     }
-  }
+  },
+  methods: {
+    toggleBusy() {
+      this.isBusy = !this.isBusy
+    },
+    getProducts: function() {
+      this.toggleBusy();
+      window.axios.get('/api/products')
+      .then((response) => {
+        this.products = response.data.data;
+        this.toggleBusy();
+      })
+    }
+  },
+  created() {
+    this.getProducts();
+  },
+  mounted() {
+    this.$root.$on("getProducts", this.getProducts);
+  },
 }
 </script>
 
