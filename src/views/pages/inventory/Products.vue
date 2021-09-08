@@ -13,8 +13,15 @@
       <b-col col lg="1">
         <b-button variant="outline-success" 
                   size="lg"
-                  @click="$bvModal.show('bv-modal-products')">
+                  @click="formTrigger('create')">
           <i class="i-Add"></i> Agregar
+        </b-button>
+      </b-col>
+      <b-col col lg="2">
+        <b-button variant="outline-primary" 
+                  size="lg"
+                  @click="refreshData()">
+          <i class="i-Reload"></i> Refrescar
         </b-button>
       </b-col>
     </b-row>
@@ -26,16 +33,28 @@
           <template #table-busy>
             <div class="text-center my-2">
               <b-spinner class="align-middle"></b-spinner>
-              <strong>Loading...</strong>
+              <strong>Cargando...</strong>
             </div>
           </template>
 
-          <template #cell(options)>
-            <a title="Editar" class="text-success mr-4 cursor-pointer">
+          <template #cell(iamge)="data">
+             <b-img v-bind="image.imageProps" rounded :src="image.imageUrlBase+data.item.image"></b-img>
+          </template>
+          
+          <template #cell(purchase_price)="data">
+             ${{ data.item.purchase_price | formatNumber }}
+          </template>
+          
+          <template #cell(sale_price)="data">
+             ${{ data.item.sale_price | formatNumber }}
+          </template>
+          
+          <template #cell(options)="data">
+            <a title="Editar" class="text-success mr-4 cursor-pointer" @click="formTrigger('update', data.item.id)">
               <i class="nav-icon i-Pen-2 font-weight-bold"></i>
             </a>
 
-            <a title="Eliminar" class="text-danger cursor-pointer">
+            <a title="Eliminar" class="text-danger cursor-pointer" @click="confirmDelete(data.item.id)">
               <i class="nav-icon i-Remove font-weight-bold"></i>
             </a>
           </template>
@@ -44,7 +63,8 @@
       </b-col>
     </b-row>
 
-    <ModalFormProduct/>
+    <ModalFormProduct
+    :title="modalTitle"/>
 
   </div>
 </template>
@@ -63,12 +83,18 @@ export default {
         {key: 'id', label: 'ID'},
         {key: 'reference', label: 'Referencia'},
         {key: 'name', label: 'Nombre'},
+        {key: 'iamge', label: 'Imagen'},
         {key: 'purchase_price', label: 'Precio de compra'},
         {key: 'sale_price', label: 'Precio de venta'},
         {key: 'stock', label: 'Stock'},
         {key: 'options', label: 'Opciones'}
       ],
-      products: []
+      products: [],
+      modalTitle: '',
+      image: {
+        imageProps: { width: 50, height: 50, class: 'm1' },
+        imageUrlBase: process.env.VUE_APP_API_URL+'/images/'
+      }
     }
   },
   methods: {
@@ -82,6 +108,47 @@ export default {
         this.products = response.data.data;
         this.toggleBusy();
       })
+    },
+    formTrigger: function(action, id = null){
+      if(action==='create'){
+        this.modalTitle = 'Crear nuevo producto'
+      }else{
+        this.modalTitle = 'Editar productos'
+      }
+      this.$root.$emit('formProducts', action, id);
+    },
+    confirmDelete: function(id){
+      this.$swal.fire({
+        title: '¿Estás seguro?',
+        text: "El producto seleccionado se eliminará",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Eliminar!',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.deleteProduct(id);
+        }
+      })
+    },
+    deleteProduct: function(id){
+      let self = this;
+      window.axios.post('/api/products/delete/'+id)
+      .then(function (response) {
+        if (response.data.success) {
+          self.$toastr.s("SE HA ELIMINADO EL PRODUCTO", "Operación exitosa");
+          self.getProducts();
+        }
+      })
+      .catch(function (error) {
+        console.log('error', error);
+        self.$toastr.e("HA OCURRIDO UN ERROR");
+      });
+    },
+    refreshData: function(){
+      this.getProducts();
     }
   },
   created() {

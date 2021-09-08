@@ -9,6 +9,9 @@ import BootstrapVue from "bootstrap-vue";
 import { ValidationObserver, ValidationProvider, extend, localize } from 'vee-validate';
 import es from 'vee-validate/dist/locale/es.json';
 import * as rules from 'vee-validate/dist/rules';
+import './utils/filters';
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 Object.keys(rules).forEach(rule => {
   extend(rule, rules[rule]);
@@ -31,6 +34,7 @@ if (token) {
 Vue.config.productionTip = false
 Vue.use(VueToastr);
 Vue.use(BootstrapVue);
+Vue.use(VueSweetalert2);
 
 new Vue({
   router,
