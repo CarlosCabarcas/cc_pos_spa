@@ -6,7 +6,8 @@ import Home from '../views/'
 import Login from '../views/auth/Login'
 import Products from '../views/pages/inventory/Products'
 import Purchase from '../views/pages/inventory/Purchase'
-import RegisterClients from '../views/pages/clients/RegisterClient'
+import Clients from '../views/pages/third/Clients'
+import Providers from '../views/pages/third/Providers'
 import PointOfSales from '../views/pages/sales/PointOfSales'
 import ReportPurchases from '../views/pages/reports/ReportPurchases'
 import ReportSales from '../views/pages/reports/ReportSales'
@@ -45,8 +46,13 @@ const routes = [
                 beforeEnter: ifAuthenticated
             },
             {
-                path: '/clients/register',
-                component: RegisterClients,
+                path: '/third/clients',
+                component: Clients,
+                beforeEnter: ifAuthenticated
+            },
+            {
+                path: '/third/providers',
+                component: Providers,
                 beforeEnter: ifAuthenticated
             },
             {

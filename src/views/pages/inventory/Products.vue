@@ -58,8 +58,8 @@
               <i class="nav-icon i-Remove font-weight-bold"></i>
             </a>
           </template>
-
         </b-table>
+        <pagination align="center" :data="data" @pagination-change-page="getProducts"></pagination>
       </b-col>
     </b-row>
 
@@ -71,14 +71,17 @@
 
 <script>
 import ModalFormProduct from '@/components/modals/ModalFormProduct.vue'
+import pagination from 'laravel-vue-pagination'
 
 export default {
   components: {
-    ModalFormProduct
+    ModalFormProduct,
+    pagination
   },
   data() {
     return {
       isBusy: false,
+      currentPage: 1,
       fields: [
         {key: 'id', label: 'ID'},
         {key: 'reference', label: 'Referencia'},
@@ -90,6 +93,10 @@ export default {
         {key: 'options', label: 'Opciones'}
       ],
       products: [],
+      data: {
+        type:Object,
+        default:null
+      },
       modalTitle: '',
       image: {
         imageProps: { width: 50, height: 50, class: 'm1' },
@@ -101,19 +108,22 @@ export default {
     toggleBusy() {
       this.isBusy = !this.isBusy
     },
-    getProducts: function() {
+    getProducts: async function(page = 1) {
       this.toggleBusy();
-      window.axios.get('/api/products')
+      await window.axios.get('/api/products?page='+page)
       .then((response) => {
-        this.products = response.data.data;
+        this.products = response.data.data.data;
+        this.data = response.data.data
         this.toggleBusy();
       })
+
+      this.currentPage = page;
     },
     formTrigger: function(action, id = null){
       if(action==='create'){
         this.modalTitle = 'Crear nuevo producto'
       }else{
-        this.modalTitle = 'Editar productos'
+        this.modalTitle = 'Editar producto'
       }
       this.$root.$emit('formProducts', action, id);
     },
@@ -139,7 +149,7 @@ export default {
       .then(function (response) {
         if (response.data.success) {
           self.$toastr.s("SE HA ELIMINADO EL PRODUCTO", "Operación exitosa");
-          self.getProducts();
+          self.getProducts(this.currentPage);
         }
       })
       .catch(function (error) {
@@ -148,14 +158,12 @@ export default {
       });
     },
     refreshData: function(){
-      this.getProducts();
+      this.getProducts(this.currentPage);
     }
-  },
-  created() {
-    this.getProducts();
   },
   mounted() {
     this.$root.$on("getProducts", this.getProducts);
+    this.getProducts(this.currentPage);
   },
 }
 </script>

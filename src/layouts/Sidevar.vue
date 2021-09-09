@@ -65,13 +65,19 @@
         
         <div v-show="showClientsMenu">
             <header>
-                <h6>Clientes</h6>
+                <h6>Terceros</h6>
             </header>
             <ul class="childNav">
                 <li class="nav-item">
-                    <router-link to="/clients/register">
-                        <i class="nav-icon i-Add-User"></i>
-                        <span class="item-name">Registro de clientes</span>
+                    <router-link to="/third/clients">
+                        <i class="nav-icon i-Business-ManWoman"></i>
+                        <span class="item-name">Clientes</span>
+                    </router-link>
+                </li>
+                <li class="nav-item">
+                    <router-link to="/third/providers">
+                        <i class="nav-icon i-Business-Mens"></i>
+                        <span class="item-name">Proveedores</span>
                     </router-link>
                 </li>
             </ul>
