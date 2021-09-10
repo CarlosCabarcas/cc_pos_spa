@@ -145,12 +145,22 @@
                         Cancelar
                         </b-button>
                         <b-button 
+                            v-if="action === 'create'"
                             variant="outline-success" 
                             size="lg" 
                             type="submit"
                             :disabled="invalid"
                         >
                         Crear
+                        </b-button>
+                        <b-button
+                            v-else 
+                            variant="outline-success" 
+                            size="lg" 
+                            type="submit"
+                            :disabled="invalid"
+                        >
+                        Editar
                         </b-button>
                     </div>
                 </div>
@@ -175,14 +185,14 @@ export default {
                 last_name: '',
                 email: '',
                 phone: '',
-                address: ''
+                address: '',
+                id: null
             },
             options: [
                 { value: 'cc', text: 'Cédula de ciudadanía' },
                 { value: 'nit', text: 'NIT' }
             ],
             action: '',
-            id: null
         }
     },
     methods: {
@@ -190,14 +200,19 @@ export default {
             this.$bvModal.hide('bv-modal-providers');
             this.resetForm();
         },
-        formPerson: function(action, id){
+        formPerson: function(action, id, data = null){
             this.action = action
-            this.id = id
+            this.form.id = id
+            if (data) {
+                this.setData(data);
+            }
             this.$bvModal.show('bv-modal-providers');
         },
         onSubmit: function(){
             if (this.action === 'create') {
                 this.createPerson();
+            }else{
+                this.updateProvider();
             }
         },
         createPerson: function(){
@@ -208,6 +223,7 @@ export default {
                     self.$toastr.s("SE HA CREADO EL REGISTRO", "Operación exitosa");
                     self.resetForm();
                     self.$bvModal.hide('bv-modal-providers');
+                    self.$root.$emit("getProviders");
                 }
             })
             .catch(function (error) {
@@ -223,6 +239,31 @@ export default {
             this.form.email = '';
             this.form.phone = '';
             this.form.address = '';
+        },
+        setData: function(data){
+            this.form.identification_type = data.identification_type;
+            this.form.identification_number = data.identification_number;
+            this.form.name = data.name;
+            this.form.last_name = data.last_name;
+            this.form.email = data.email;
+            this.form.phone = data.phone;
+            this.form.address = data.address;
+        },
+        updateProvider: function(){
+            let self = this
+            window.axios.post('/api/'+this.type+'/update', self.form)
+            .then(function (response) {
+                if (response.data.success) {
+                    self.$toastr.s("SE HA EDITADO EL REGISTRO", "Operación exitosa");
+                    self.resetForm();
+                    self.$bvModal.hide('bv-modal-providers');
+                    self.$root.$emit("getProviders");
+                }
+            })
+            .catch(function (error) {
+                console.log('error', error);
+                self.$toastr.e("HA OCURRIDO UN ERROR");
+            });
         }
     },
     mounted() {

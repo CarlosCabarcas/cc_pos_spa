@@ -149,7 +149,7 @@ export default {
       .then(function (response) {
         if (response.data.success) {
           self.$toastr.s("SE HA ELIMINADO EL PRODUCTO", "Operación exitosa");
-          self.getProducts(this.currentPage);
+          self.getProducts(self.currentPage);
         }
       })
       .catch(function (error) {
