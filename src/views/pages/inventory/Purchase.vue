@@ -12,7 +12,8 @@
     <b-row class="justify-content-end">
       <b-col col lg="1">
         <b-button variant="outline-success" 
-                  size="lg">
+                  size="lg"
+                  @click="formTrigger('create')">
           <i class="i-Add"></i> Agregar
         </b-button>
       </b-col>
@@ -23,12 +24,31 @@
         </b-button>
       </b-col>
     </b-row>
+
+    <ModalFormPurchase/>
   </div>
 </template>
 
 <script>
+import ModalFormPurchase from '@/components/modals/ModalFormPurchase.vue'
+
 export default {
-  
+  components: {
+    ModalFormPurchase
+  },
+  data: () => ({
+    modalTitle: ''
+  }),
+  methods: {
+    formTrigger: function(action, id = null){
+      if(action==='create'){
+        this.modalTitle = 'Registrar nueva compra'
+      }else{
+        this.modalTitle = 'Editar compra'
+      }
+      this.$root.$emit('formPurchases', action, id);
+    }
+  }
 }
 </script>
 

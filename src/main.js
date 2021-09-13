@@ -12,6 +12,8 @@ import * as rules from 'vee-validate/dist/rules';
 import './utils/filters';
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css'
 
 Object.keys(rules).forEach(rule => {
   extend(rule, rules[rule]);
@@ -21,6 +23,7 @@ localize('es', es);
 
 Vue.component('ValidationObserver', ValidationObserver);
 Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('v-select', vSelect);
 
 window.axios = axios;
 axios.defaults.baseURL = process.env.VUE_APP_API_URL;
