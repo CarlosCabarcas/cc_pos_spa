@@ -1,7 +1,7 @@
 <template>
   <b-modal id="bv-modal-purchases" class="modal-backdrop fade show" size="lg" hide-footer hide-header-close>
     <template #modal-title>
-        Titulo
+        {{ title }}
     </template>
     <ValidationObserver v-slot="{ invalid }">
         <form @submit.prevent="onSubmit">
@@ -141,6 +141,9 @@ import { es } from 'vuejs-datepicker/dist/locale'
 export default {
     components: {
         Datepicker
+    },
+    props: {
+        title: String
     },
     data: () => ({
         es: es,

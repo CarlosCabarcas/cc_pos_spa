@@ -19,25 +19,78 @@
       </b-col>
       <b-col col lg="2">
         <b-button variant="outline-primary" 
-                  size="lg">
+                  size="lg"
+                  @click="refreshData()">
           <i class="i-Reload"></i> Refrescar
         </b-button>
       </b-col>
     </b-row>
 
-    <ModalFormPurchase/>
+    <b-row class="pt-5">
+      <b-table striped hover :items="purchases" :fields="fields" :busy="isBusy">
+        <template #table-busy>
+          <div class="text-center my-2">
+            <b-spinner class="align-middle"></b-spinner>
+            <strong>Cargando...</strong>
+          </div>
+        </template>
+
+        <template #cell(provider)="data">
+          {{ data.item.provider.person.name }} {{ data.item.provider.person.last_name }}
+        </template>
+        
+        <template #cell(date)="data">
+          {{ data.item.date | formatDate }} 
+        </template>
+        
+        <template #cell(options)="data">
+          <a title="Detalle" class="text-success mr-4 cursor-pointer" @click="getDetails(data.item.id)">
+            <i class="nav-icon i-Eye font-weight-bold"></i>
+          </a>
+          
+          <a title="Anular" class="text-danger mr-4 cursor-pointer">
+            <i class="nav-icon i-Remove font-weight-bold"></i>
+          </a>
+        </template>
+
+      </b-table>
+      <pagination align="center" :data="data" @pagination-change-page="getPurchases"></pagination>
+    </b-row>
+
+    <ModalFormPurchase :title="modalTitle"/>
+    <ModalPurchaseDetail :details="details" :number="purchaseNumber"/>
   </div>
 </template>
 
 <script>
 import ModalFormPurchase from '@/components/modals/ModalFormPurchase.vue'
+import ModalPurchaseDetail from '@/components/modals/ModalPurchaseDetail.vue'
+import pagination from 'laravel-vue-pagination'
 
 export default {
   components: {
-    ModalFormPurchase
+    ModalFormPurchase,
+    ModalPurchaseDetail,
+    pagination
   },
   data: () => ({
-    modalTitle: ''
+    modalTitle: 'Agregar factura',
+    currentPage: 1,
+    isBusy: false,
+    purchases: [],
+    details: [],
+    data: {
+      type:Object,
+      default:null
+    },
+    fields: [
+      {key: 'number', label: 'Número'},
+      {key: 'date', label: 'Fecha'},
+      {key: 'provider', label: 'Proveedor'},
+      {key: 'status', label: 'Estado'},
+      {key: 'options', label: 'Opciones'}
+    ],
+    purchaseNumber: ''
   }),
   methods: {
     formTrigger: function(action, id = null){
@@ -47,7 +100,36 @@ export default {
         this.modalTitle = 'Editar compra'
       }
       this.$root.$emit('formPurchases', action, id);
+    },
+    toggleBusy() {
+      this.isBusy = !this.isBusy
+    },
+    getPurchases: async function(page = 1){
+      this.toggleBusy();
+      await window.axios.get('/api/purchases?page='+page)
+      .then((response) => {
+        this.purchases = response.data.data.data;
+        this.data = response.data.data
+        this.toggleBusy();
+      })
+
+      this.currentPage = page;
+    },
+    refreshData: function(){
+      this.getPurchases(this.currentPage);
+    },
+    getDetails: async function(id){
+      await window.axios.get('/api/purchases/purchase/'+id)
+      .then((response) => {
+        this.purchaseNumber = response.data.data.number;
+        this.details = response.data.data.details;
+      })
+
+      this.$bvModal.show('bv-modal-purchase-detail');
     }
+  },
+  mounted() {
+    this.getPurchases(this.currentPage);
   }
 }
 </script>
