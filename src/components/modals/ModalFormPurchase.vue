@@ -249,14 +249,27 @@ export default {
             window.axios.post('/api/purchases/create', this.form)
             .then(function (response) {
                 if (response.data.success) {
-                self.$toastr.s("SE HA CREADO LA FACTURA", "Operación exitosa");
-                self.$bvModal.hide('bv-modal-purchases');
+                    self.resetForm();
+                    self.$toastr.s("SE HA CREADO LA FACTURA", "Operación exitosa");
+                    self.$bvModal.hide('bv-modal-purchases');
                 }
             })
             .catch(function (error) {
                 console.log('error', error);
                 self.$toastr.e("HA OCURRIDO UN ERROR");
             });
+        },
+        resetForm: function(){
+            this.id = null
+            this.providers = []
+            this.products = []
+            this.currentProduct = null
+            this.currentQuantity = null
+            this.currentPrice = null
+            this.form.number = ''
+            this.form.date = new Date()
+            this.form.provider = null
+            this.form.data = []
         }
     },
     mounted() {

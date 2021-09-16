@@ -21,6 +21,19 @@
             </b-table>
         </b-col>
     </b-row>
+
+    <div class="container-fluid pt-3 mt-4">
+        <div class="w-100 d-flex justify-content-end">
+            <b-button
+                variant="outline-dark"
+                size="lg"
+                class="mr-1"
+                @click="hideModal()"
+            >
+                Cerrar
+            </b-button>
+        </div>
+    </div>
   </b-modal>
 </template>
 
@@ -37,6 +50,11 @@ export default {
             {key: 'total', label: 'Total'},
         ],
     }),
+    methods: {
+        hideModal: function(){
+            this.$bvModal.hide('bv-modal-purchase-detail');
+        }
+    }
 }
 </script>
 

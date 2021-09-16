@@ -43,12 +43,21 @@
           {{ data.item.date | formatDate }} 
         </template>
         
+        <template #cell(total)="data">
+          ${{ data.item.total | formatNumber }} 
+        </template>
+        
+        <template #cell(status)="data">
+          <b-badge variant="success" v-if="data.item.status">Activa</b-badge>
+          <b-badge variant="danger" v-else>Anulada</b-badge>
+        </template>
+        
         <template #cell(options)="data">
           <a title="Detalle" class="text-success mr-4 cursor-pointer" @click="getDetails(data.item.id)">
             <i class="nav-icon i-Eye font-weight-bold"></i>
           </a>
           
-          <a title="Anular" class="text-danger mr-4 cursor-pointer">
+          <a title="Anular" class="text-danger mr-4 cursor-pointer" @click="confirmDelete(data.item.id)">
             <i class="nav-icon i-Remove font-weight-bold"></i>
           </a>
         </template>
@@ -86,6 +95,7 @@ export default {
     fields: [
       {key: 'number', label: 'Número'},
       {key: 'date', label: 'Fecha'},
+      {key: 'total', label: 'Total'},
       {key: 'provider', label: 'Proveedor'},
       {key: 'status', label: 'Estado'},
       {key: 'options', label: 'Opciones'}
@@ -126,7 +136,37 @@ export default {
       })
 
       this.$bvModal.show('bv-modal-purchase-detail');
-    }
+    },
+    confirmDelete: function(id){
+      this.$swal.fire({
+        title: '¿Estás seguro?',
+        text: "La factura seleccionada se anulará",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Anular!',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.cancelPurchase(id);
+        }
+      })
+    },
+    cancelPurchase: function(id){
+      let self = this;
+      window.axios.post('/api/purchases/cancel/'+id)
+      .then(function (response) {
+        if (response.data.success) {
+          self.$toastr.s("SE HA ANULADO LA FACTURA", "Operación exitosa");
+          self.getPurchases(self.currentPage);
+        }
+      })
+      .catch(function (error) {
+        console.log('error', error);
+        self.$toastr.e("HA OCURRIDO UN ERROR");
+      });
+    },
   },
   mounted() {
     this.getPurchases(this.currentPage);
