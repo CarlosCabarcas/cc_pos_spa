@@ -170,6 +170,7 @@ export default {
   },
   mounted() {
     this.getPurchases(this.currentPage);
+    this.$root.$on("getPurchases", this.refreshData);
   }
 }
 </script>

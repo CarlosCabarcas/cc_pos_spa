@@ -258,6 +258,7 @@ export default {
                     self.resetForm();
                     self.$bvModal.hide('bv-modal-providers');
                     self.$root.$emit("getProviders");
+                    self.$root.$emit("getClients");
                 }
             })
             .catch(function (error) {

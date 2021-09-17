@@ -252,6 +252,7 @@ export default {
                     self.resetForm();
                     self.$toastr.s("SE HA CREADO LA FACTURA", "Operación exitosa");
                     self.$bvModal.hide('bv-modal-purchases');
+                    self.$root.$emit('getPurchases');
                 }
             })
             .catch(function (error) {
