@@ -9,6 +9,10 @@ Vue.filter("formatNumber", function(value) {
   return numeral(value).format("0,0");
 });
 
+Vue.filter("formatNumberCurrency", function(value) {
+  return '$'+numeral(value).format("0,0");
+});
+
 Vue.filter('formatDate', function(value) {
   if (value) {
     return moment(value).format('DD/MM/YYYY')
