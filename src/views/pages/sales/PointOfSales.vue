@@ -10,8 +10,31 @@
     <div class="separator-breadcrumb border-top"></div>
 
     <b-row class="mt-4">
-      <b-col cols="6">
+      <b-col cols="4">
+        <b-form-input
+          id="inline-form-input-name"
+          class="mb-2 mr-sm-2 mb-sm-0"
+          v-model="search"
+          placeholder="Buscar producto..."
+        ></b-form-input>
 
+      </b-col>
+
+      <b-col cols="2">
+        <b-button variant="primary" @click="getProducts()"><i class="i-Magnifi-Glass1"></i> Buscar</b-button>
+      </b-col>
+      
+      <b-col cols="1">
+        <label>Cliente:</label>
+      </b-col>
+
+      <b-col cols="5">
+        <v-select :options="clients" v-model="client"  name="client"></v-select>
+      </b-col>
+    </b-row>
+
+    <b-row class="mt-4">
+      <b-col cols="6">
         <b-row>
           <b-col cols="4" v-for="product in products" :key="product.id">
             <b-card
@@ -25,7 +48,7 @@
               class="mb-2"
             >
               <b-card-text>
-                Some quick example.
+                {{ product.description }}
               </b-card-text>
 
               <b-button href="#" variant="primary" @click="addToCart(product.id)"><i class="i-Add"></i> Agregar</b-button>
@@ -111,6 +134,24 @@
                 </div>
               </div>
             </div>
+            <b-row v-if="productsCart.length > 0" align-h="between">
+              <b-col>
+                <b-form-checkbox
+                  id="print"
+                  v-model="print"
+                  name="print"
+                  value="1"
+                  unchecked-value="0"
+                >
+                  Imprimir factura de venta
+                </b-form-checkbox>
+              </b-col>
+              <b-col cols="3">
+                <b-button variant="success" size="lg" @click="finalize()">
+                  <i class="i-Cash-register-2"></i> Finalizar
+                </b-button>
+              </b-col>
+            </b-row>
           </div>
         </div>
       </b-col>
@@ -128,10 +169,14 @@ export default {
   data () {
     return {
       currency: '$',
+      search: '',
+      clients: [],
+      client: null,
       products: [],
       productsCart: [],
       total: 0,
       discount: 0,
+      print: 1,
       data: {
         type:Object,
         default:null
@@ -144,10 +189,21 @@ export default {
   },
   methods: {
     getProducts: async function(page = 1){
-      await window.axios.get('/api/products/6?page='+page)
+      await window.axios.get('/api/products/sales/6/'+this.search+'?page='+page)
       .then((response) => {
         this.products = response.data.data.data
         this.data = response.data.data
+      })
+    },
+    getClients: async function(){
+      let self = this
+      await window.axios.get('/api/clients/all')
+      .then((response) => {
+        if (response.data.success) {
+          response.data.data.forEach(client => {
+            self.clients.push({ label: client.person.name+' '+client.person.last_name, code: Number(client.id) })
+          });
+        }
       })
     },
     addToCart: function(id){
@@ -209,10 +265,63 @@ export default {
       if (this.discount > 0) {
         this.discount--
       }
+    },
+    finalize: function(){
+      if (!this.client) {
+        this.$toastr.w("DEBE SELECCIONAR UN CLIENTE");
+        return false;
+      }
+
+      let data = {
+        client: this.client.code,
+        discount: this.discount,
+        total: this.total,
+        products: this.productsCart,
+        print: this.print
+      }
+
+      this.$swal.fire({
+        title: '¿Estás seguro?',
+        text: "Se registrará una nueva venta",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Confirmar!',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.save(data);
+        }
+      })
+    },
+    save: function(data){
+      let self = this;
+      window.axios.post('/api/sales/create', data)
+      .then(function (response) {
+        if (response.data.success) {
+          if (self.print == 1 || self.print == "1") {
+            window.open(process.env.VUE_APP_API_URL+'/pdf/factura_venta'+response.data.data.id+'.pdf', '_blank').focus();
+          }
+          self.$toastr.s("SE HA REGISTRADO LA VENTA", "Operación exitosa");
+          // self.reset();
+        }
+      })
+      .catch(function (error) {
+        console.log('error', error);
+        self.$toastr.e("HA OCURRIDO UN ERROR");
+      });
+    },
+    reset: function(){
+      this.client = null;
+      this.productsCart = [];
+      this.total = 0;
+      this.discount = 0;
     }
   },
   mounted () {
     this.getProducts();
+    this.getClients();
   }
 }
 </script>
