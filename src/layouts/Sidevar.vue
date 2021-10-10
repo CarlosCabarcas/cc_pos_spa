@@ -134,6 +134,7 @@ export default {
     },
     methods: {
         changeOption: function(option){
+            localStorage.setItem('option', option)
             switch (option) {
                 case 'inventory':
                     this.showInventoryMenu = true;
@@ -167,6 +168,10 @@ export default {
                     break;
             }
         }
+    },
+    mounted() {
+        let option = localStorage.getItem('option')
+        this.changeOption(option);
     }
 }
 </script>
