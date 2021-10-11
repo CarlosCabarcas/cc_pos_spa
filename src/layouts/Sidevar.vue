@@ -94,6 +94,12 @@
                         <span class="item-name">Punto de venta</span>
                     </router-link >
                 </li>
+                <li class="nav-item">
+                    <router-link to="/sales/sales">
+                        <i class="nav-icon i-Check"></i>
+                        <span class="item-name">Ventas</span>
+                    </router-link >
+                </li>
             </ul>
         </div>
         

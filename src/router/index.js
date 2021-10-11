@@ -9,6 +9,7 @@ import Purchase from '../views/pages/inventory/Purchase'
 import Clients from '../views/pages/third/Clients'
 import Providers from '../views/pages/third/Providers'
 import PointOfSales from '../views/pages/sales/PointOfSales'
+import Sales from '../views/pages/sales/Sales'
 import ReportPurchases from '../views/pages/reports/ReportPurchases'
 import ReportSales from '../views/pages/reports/ReportSales'
 
@@ -58,6 +59,11 @@ const routes = [
             {
                 path: '/sales/point-of-sales',
                 component: PointOfSales,
+                beforeEnter: ifAuthenticated
+            },
+            {
+                path: '/sales/sales',
+                component: Sales,
                 beforeEnter: ifAuthenticated
             },
             {
