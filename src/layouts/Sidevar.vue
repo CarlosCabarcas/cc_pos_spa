@@ -114,12 +114,12 @@
                         <span class="item-name">Reporte de ventas</span>
                     </router-link>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <router-link to="/report/purchases">
                         <i class="nav-icon i-Bar-Chart-3"></i>
                         <span class="item-name">Reporte de compras</span>
                     </router-link>
-                </li>
+                </li> -->
             </ul>
         </div>
     </div>

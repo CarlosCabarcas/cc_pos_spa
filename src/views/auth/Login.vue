@@ -71,11 +71,7 @@ export default {
             .catch((error) => {
                 // let data = error.data;
                 console.log('error: ', error);
-                this.$toastr(
-                    "error",
-                    "<span>alert</span>",
-                    '<i class="i-Unlike text-muted header-icon"></i>  Test' 
-                );
+                this.$toastr.e("USUARIO O CONTRASEÑA INVALIDOS");
                 this.loading = false;
             });
         }

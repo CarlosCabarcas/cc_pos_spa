@@ -34,6 +34,7 @@ const routes = [
     {
         path: '/',
         component: Home,
+        beforeEnter: ifAuthenticated,
         children: [
             {
                 path: '/inventory/products',
