@@ -9,14 +9,28 @@
     </div>
     <div class="separator-breadcrumb border-top"></div>
 
-    <b-row class="justify-content-end">
-      <b-col col lg="1">
+    <b-row class="">
+      <b-col cols="4">
+        <b-form-input
+          id="inline-form-input-name"
+          class="mb-2 mr-sm-2 mb-sm-0"
+          v-model="search"
+          placeholder="Buscar producto..."
+        ></b-form-input>
+
+      </b-col>
+      <b-col cols="4">
+        <b-button variant="primary" @click="getProducts()"><i class="i-Magnifi-Glass1"></i> Buscar</b-button>
+      </b-col>
+
+      <b-col col lg="1" class="mr-4">
         <b-button variant="outline-success" 
                   size="lg"
                   @click="formTrigger('create')">
           <i class="i-Add"></i> Agregar
         </b-button>
       </b-col>
+
       <b-col col lg="2">
         <b-button variant="outline-primary" 
                   size="lg"
@@ -101,7 +115,8 @@ export default {
       image: {
         imageProps: { width: 50, height: 50, class: 'm1' },
         imageUrlBase: process.env.VUE_APP_API_URL+'/images/'
-      }
+      },
+      search: ''
     }
   },
   methods: {
@@ -110,7 +125,7 @@ export default {
     },
     getProducts: async function(page = 1) {
       this.toggleBusy();
-      await window.axios.get('/api/products?page='+page)
+      await window.axios.get('/api/products/'+this.search+'?page='+page)
       .then((response) => {
         this.products = response.data.data.data;
         this.data = response.data.data
