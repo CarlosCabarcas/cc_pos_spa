@@ -1,7 +1,7 @@
 <template>
   <b-modal id="bv-modal-sale-detail" class="modal-backdrop fade show" size="lg" hide-footer hide-header-close>
     <template #modal-title>
-        Detalle de la factura #{{ number }}
+        Detalle de la venta #{{ number }}
     </template>
 
     <b-row>
