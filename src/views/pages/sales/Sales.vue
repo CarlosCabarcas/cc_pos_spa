@@ -85,6 +85,10 @@
           </template>
 
           <template #cell(options)="data">
+            <a title="Detalles" class="text-success cursor-pointer mr-2" @click="getDetails(data.item.id)">
+              <i class="nav-icon i-Eye font-weight-bold"></i>
+            </a>
+
             <a title="Imprimir" class="text-info cursor-pointer mr-2" :href="urlBase+'/pdf/factura_venta'+data.item.id+'.pdf'" target="_blank">
               <i class="nav-icon i-File-Word font-weight-bold"></i>
             </a>
@@ -100,6 +104,7 @@
 
       </b-col>
     </b-row>
+    <ModalSaleDetail :details="details" :number="saleNumber"/>
   </div>
 </template>
 
@@ -109,11 +114,13 @@ import Datepicker from 'vuejs-datepicker';
 import { es } from 'vuejs-datepicker/dist/locale'
 import moment from 'moment';
 import 'moment/locale/es' // without this line it didn't work
+import ModalSaleDetail from '@/components/modals/ModalSaleDetail.vue'
 moment.locale('es')
 export default {
     components: {
         pagination,
-        Datepicker
+        Datepicker,
+        ModalSaleDetail
     },
     data(){
       return {
@@ -136,7 +143,9 @@ export default {
             type:Object,
             default:null
         },
-        urlBase: process.env.VUE_APP_API_URL
+        urlBase: process.env.VUE_APP_API_URL,
+        saleNumber: '',
+        details: []
       }
     },
     methods: {
@@ -198,6 +207,14 @@ export default {
             }else {
                 this.search = new Date()
             }
+        },
+        getDetails: async function(id){
+          await window.axios.get('/api/sale/sales/'+id)
+          .then((response) => {
+            this.saleNumber = String(response.data.data.id);
+            this.details = response.data.data.details;
+          })
+          this.$bvModal.show('bv-modal-sale-detail');
         }
     },
     mounted() {
