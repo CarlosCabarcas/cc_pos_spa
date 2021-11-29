@@ -30,6 +30,14 @@ const ifAuthenticated = (to, from, next) => {
     next('/login')
 }
 
+const ifNotAuthenticatedAdmin = (to, from, next) => {
+    let role  = localStorage.getItem('user-role')
+    if (store.getters.isAuthenticated && role === 'admin') {
+        return next()
+    }
+    next('/login')
+}
+
 const routes = [
     {
         path: '/',
@@ -40,22 +48,22 @@ const routes = [
                 path: '/inventory/products',
                 name: 'Products',
                 component: Products,
-                beforeEnter: ifAuthenticated
+                beforeEnter: ifNotAuthenticatedAdmin
             },
             {
                 path: '/inventory/purchase',
                 component: Purchase,
-                beforeEnter: ifAuthenticated
+                beforeEnter: ifNotAuthenticatedAdmin
             },
             {
                 path: '/third/clients',
                 component: Clients,
-                beforeEnter: ifAuthenticated
+                beforeEnter: ifNotAuthenticatedAdmin
             },
             {
                 path: '/third/providers',
                 component: Providers,
-                beforeEnter: ifAuthenticated
+                beforeEnter: ifNotAuthenticatedAdmin
             },
             {
                 path: '/sales/point-of-sales',
@@ -70,12 +78,12 @@ const routes = [
             {
                 path: '/report/sales',
                 component: ReportSales,
-                beforeEnter: ifAuthenticated
+                beforeEnter: ifNotAuthenticatedAdmin
             },
             {
                 path: '/report/purchases',
                 component: ReportPurchases,
-                beforeEnter: ifAuthenticated
+                beforeEnter: ifNotAuthenticatedAdmin
             },
         ]
     },

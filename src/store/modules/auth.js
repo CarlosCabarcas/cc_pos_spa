@@ -40,7 +40,12 @@ export default {
                 commit('SET_STATUS', 'loading');
                 let auth = await axios.post('/api/login', { email: user.email, password: user.password })
                 const token = auth.data.access_token
-                return dispatch('AUTH_DATA', token);
+                const userInfo = auth.data.user
+                let data = {
+                    token: token,
+                    userInfo: userInfo
+                }
+                return dispatch('AUTH_DATA', data);
             } catch (error) {
                 localStorage.removeItem('user-token')
                 commit('SET_STATUS', 'error');
@@ -54,6 +59,7 @@ export default {
             try {
                 let response = await axios.post('/api/logout')
                 localStorage.removeItem('user-token');
+                localStorage.removeItem('user-role');
                 delete axios.defaults.headers.common['Authorization'];
                 await commit('SET_TOKEN', '');
                 return response;
@@ -62,11 +68,12 @@ export default {
             }
         },
 
-        [AUTH_DATA]: async({ commit, state, dispatch }, token) => {
-            if (token) {
-                localStorage.setItem('user-token', token)
-                axios.defaults.headers.common['Authorization'] = "Bearer " + token
-                commit('SET_TOKEN', token);
+        [AUTH_DATA]: async({ commit, state, dispatch }, data) => {
+            if (data.token) {
+                localStorage.setItem('user-token', data.token)
+                localStorage.setItem('user-role', data.userInfo.role)
+                axios.defaults.headers.common['Authorization'] = "Bearer " + data.token
+                commit('SET_TOKEN', data.token);
             }
             if (!state.token) {
                 return;

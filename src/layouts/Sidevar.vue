@@ -2,7 +2,7 @@
   <div class="side-content-wrap">
     <div class="sidebar-left open rtl-ps-none" data-perfect-scrollbar data-suppress-scroll-x="true">
         <ul class="navigation-left">
-            <li :class="{ 'nav-item': defaultClass,  'active': showInventoryMenu}" data-item="dashboard">
+            <li :class="{ 'nav-item': defaultClass,  'active': showInventoryMenu}" data-item="dashboard" v-if="role == 'admin'">
                 <a class="nav-item-hold" @click="changeOption('inventory')">
                     <i class="nav-icon i-Check"></i>
                     <span class="nav-text">Inventario</span>
@@ -10,7 +10,7 @@
                 <div class="triangle"></div>
             </li>
 
-            <li :class="{ 'nav-item': defaultClass, 'active': showClientsMenu }" data-item="dashboard">
+            <li :class="{ 'nav-item': defaultClass, 'active': showClientsMenu }" data-item="dashboard" v-if="role == 'admin'">
                 <a class="nav-item-hold" @click="changeOption('clients')">
                     <i class="nav-icon i-Business-ManWoman"></i>
                     <span class="nav-text">Clientes</span>
@@ -26,7 +26,7 @@
                 <div class="triangle"></div>
             </li>
             
-            <li :class="{ 'nav-item': defaultClass, 'active': showReportsMenu }" data-item="dashboard">
+            <li :class="{ 'nav-item': defaultClass, 'active': showReportsMenu }" data-item="dashboard" v-if="role == 'admin'">
                 <a class="nav-item-hold" @click="changeOption('reports')">
                     <i class="nav-icon i-Bar-Chart"></i>
                     <span class="nav-text">Reportes</span>
@@ -43,7 +43,7 @@
             </div>
         </header>
         <!-- Submenu Dashboards -->
-        <div v-show="showInventoryMenu">
+        <div v-show="showInventoryMenu" v-if="role == 'admin'">
             <header>
                 <h6>Inventario</h6>
             </header>
@@ -63,7 +63,7 @@
             </ul>
         </div>
         
-        <div v-show="showClientsMenu">
+        <div v-show="showClientsMenu" v-if="role == 'admin'">
             <header>
                 <h6>Terceros</h6>
             </header>
@@ -103,7 +103,7 @@
             </ul>
         </div>
         
-        <div v-show="showReportsMenu">
+        <div v-show="showReportsMenu" v-if="role == 'admin'">
             <header>
                 <h6>Reportes</h6>
             </header>
@@ -135,7 +135,8 @@ export default {
             showClientsMenu: false,
             showSalesMenu: false,
             showReportsMenu: false,
-            defaultClass: true
+            defaultClass: true,
+            role: localStorage.getItem('user-role')
         }
     },
     methods: {
