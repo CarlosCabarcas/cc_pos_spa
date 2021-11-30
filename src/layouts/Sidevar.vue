@@ -10,7 +10,7 @@
                 <div class="triangle"></div>
             </li>
 
-            <li :class="{ 'nav-item': defaultClass, 'active': showClientsMenu }" data-item="dashboard" v-if="role == 'admin'">
+            <li :class="{ 'nav-item': defaultClass, 'active': showClientsMenu }" data-item="dashboard">
                 <a class="nav-item-hold" @click="changeOption('clients')">
                     <i class="nav-icon i-Business-ManWoman"></i>
                     <span class="nav-text">Clientes</span>
@@ -63,7 +63,7 @@
             </ul>
         </div>
         
-        <div v-show="showClientsMenu" v-if="role == 'admin'">
+        <div v-show="showClientsMenu">
             <header>
                 <h6>Terceros</h6>
             </header>
@@ -74,7 +74,7 @@
                         <span class="item-name">Clientes</span>
                     </router-link>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" v-if="role == 'admin'">
                     <router-link to="/third/providers">
                         <i class="nav-icon i-Business-Mens"></i>
                         <span class="item-name">Proveedores</span>

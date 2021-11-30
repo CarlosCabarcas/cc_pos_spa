@@ -58,7 +58,7 @@ const routes = [
             {
                 path: '/third/clients',
                 component: Clients,
-                beforeEnter: ifNotAuthenticatedAdmin
+                beforeEnter: ifAuthenticated
             },
             {
                 path: '/third/providers',
