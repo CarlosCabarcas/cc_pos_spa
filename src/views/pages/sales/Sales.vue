@@ -100,7 +100,7 @@
 
         </b-table>
 
-        <pagination align="center" :data="data" @pagination-change-page="getSales"></pagination>
+        <pagination align="center" limit="-1" :data="data" @pagination-change-page="getSales"></pagination>
 
       </b-col>
     </b-row>

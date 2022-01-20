@@ -55,7 +55,7 @@
             </b-card>
           </b-col>
         </b-row>
-        <pagination class="mt-4" align="center" :data="data" @pagination-change-page="getProducts"></pagination>
+        <pagination class="mt-4" align="center" limit="-1" :data="data" @pagination-change-page="getProducts"></pagination>
       </b-col>
 
       <b-col cols="6">
